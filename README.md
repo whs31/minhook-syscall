@@ -4,7 +4,7 @@
 
 The Minimalistic x86/x64 API Hooking Library for Windows
 
-The primary difference in this version is the usage of `NtProtectVirtualMemory` instead of `VirtualProtect`. The WINAPI function is hooked by VAC and is actively checked by it, but, being a ring3 anticheat, it cannot hook ntdll functions. Doesn't get you banned, but still flags you and condemns you to flagging. Enjoy removing a detection vector!
+The primary difference in this version is the usage of `NtProtectVirtualMemory` instead of `VirtualProtect`. The WINAPI function is hooked by VAC and is actively checked by it, but, being a ring3 anticheat, it cannot hook ntdll functions. Using `VirtualProtect` doesn't get you banned, but still flags you and condemns you to eternal suffering. Enjoy removing a detection vector!
 
 http://www.codeproject.com/KB/winsdk/LibMinHook.aspx
 
