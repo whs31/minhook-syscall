@@ -390,7 +390,7 @@ static MH_STATUS EnableHookLL(UINT pos, BOOL enable)
         patchSize    += sizeof(JMP_REL_SHORT);
     }
     VirtualQuery(pPatchTarget, &mbi, sizeof(mbi));
-    if (NtProtectVirtualMemory(GetCurrentProcess(), &mbi.BaseAddress, &mbi.RegionSize, PAGE_EXECUTE_READWRITE, &mbi.Protect))
+    if (NtProtectVirtualMemory(GetCurrentProcess(), (BYTE**)(&mbi.BaseAddress), &mbi.RegionSize, PAGE_EXECUTE_READWRITE, &mbi.Protect))
         return MH_ERROR_MEMORY_PROTECT;
 
     if (enable)

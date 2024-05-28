@@ -61,6 +61,7 @@ if(BUILD_SHARED_LIBS)
 endif()
 
 add_library(minhook ${SOURCES_MINHOOK} ${SOURCES_HDE} ${RESOURCES})
+add_library(d2a::minhook ALIAS minhook)
 
 target_include_directories(minhook PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/>
@@ -92,50 +93,51 @@ endif()
 ################
 # CMAKE CONFIG # 
 ################
+#if(${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME})
+  configure_package_config_file(
+      "cmake/minhook-config.cmake.in"
+      "minhook-config.cmake"
+    INSTALL_DESTINATION
+      "lib/minhook"
+  )
 
-configure_package_config_file(
-    "cmake/minhook-config.cmake.in"
-    "minhook-config.cmake"
-  INSTALL_DESTINATION 
-    "lib/minhook"
-)
+  write_basic_package_version_file(
+    "minhook-config-version.cmake"
+  VERSION
+    ${MINHOOK_VERSION}
+  COMPATIBILITY
+    AnyNewerVersion
+  )
 
-write_basic_package_version_file(
-  "minhook-config-version.cmake"
-VERSION 
-  ${MINHOOK_VERSION}
-COMPATIBILITY
-  AnyNewerVersion
-)
+  install(
+    FILES
+      "${CMAKE_CURRENT_BINARY_DIR}/minhook-config.cmake"
+      "${CMAKE_CURRENT_BINARY_DIR}/minhook-config-version.cmake"
+    DESTINATION
+      "lib/minhook"
+  )
 
-install(
-  FILES 
-    "${CMAKE_CURRENT_BINARY_DIR}/minhook-config.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/minhook-config-version.cmake"
-  DESTINATION 
-    "lib/minhook"
-)
+  ###################
+  #     INSTALL     #
+  ###################
 
-###################
-#     INSTALL     #
-###################
+  install(TARGETS minhook
+          EXPORT minhook-targets
+          RUNTIME DESTINATION "bin"
+          ARCHIVE DESTINATION "lib"
+          LIBRARY DESTINATION "lib"
+  )
 
-install(TARGETS minhook
-        EXPORT minhook-targets
-        RUNTIME DESTINATION "bin"
-        ARCHIVE DESTINATION "lib"
-        LIBRARY DESTINATION "lib"
-)
+  install(
+    EXPORT
+      minhook-targets
+    NAMESPACE
+      minhook::
+    DESTINATION
+      "lib/minhook"
+  )
 
-install(
-  EXPORT
-    minhook-targets
-  NAMESPACE 
-    minhook::
-  DESTINATION 
-    "lib/minhook"
-)
-
-install(
-  DIRECTORY include DESTINATION .
-)
+  install(
+    DIRECTORY include DESTINATION .
+  )
+#endif()
